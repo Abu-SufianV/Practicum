@@ -33,32 +33,18 @@ while num_uniq(number) == False:
 print(f"Компьютер загадал: {number}")
 
 UNIQ = False
-<<<<<<< HEAD
-COWS = 0
-BULLS = 0
-=======
->>>>>>> bulls_and_cows
 
 while UNIQ == False:
     try:
         user_num = input('\nВведите число: ')
         if not num_uniq(int(user_num)):
             print('Цифры в числе не должны повторяться.')
-<<<<<<< HEAD
-        elif (len(str(user_num)) < 4):
-=======
         elif (len(str(user_num)) != 4):
->>>>>>> bulls_and_cows
             print('Введите четырёхзначное число.')
         elif number != user_num:
             PC = list(number)
             USER = list(user_num)
 
-<<<<<<< HEAD
-            for num in USER:
-                if num in PC:
-                    COWS += 1
-=======
             COWS = 0
             BULLS = 0
 
@@ -71,14 +57,9 @@ while UNIQ == False:
             print(f"Коров - {COWS}")
             print(f"Быков - {BULLS}")
 
->>>>>>> bulls_and_cows
         else:
             UNIQ = True
     except ValueError:
         print('Вы неправильно ввели число.')
 
-<<<<<<< HEAD
-print(f'ВЫ ОТГАДАЛИ! \nКомпьютер загадал число {number}')
-=======
 print(f'ВЫ ОТГАДАЛИ! \nКомпьютер загадал число - {number}')
->>>>>>> bulls_and_cows
