@@ -30,13 +30,14 @@ while num_uniq(number) == False:
     number = str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(
         random.randint(0, 9)) + str(random.randint(0, 9))
 
-print(f"Компьютер загадал: {number}")
+# print(f"Компьютер загадал: {number}")
 
 UNIQ = False
-
+STEP = 1
 while UNIQ == False:
+    print(f'\nХод #{STEP}')
     try:
-        user_num = input('\nВведите число: ')
+        user_num = input('Введите число: ')
         if not num_uniq(int(user_num)):
             print('Цифры в числе не должны повторяться.')
         elif (len(str(user_num)) != 4):
@@ -56,6 +57,7 @@ while UNIQ == False:
             COWS = COWS - BULLS
             print(f"Коров - {COWS}")
             print(f"Быков - {BULLS}")
+            STEP += 1
 
         else:
             UNIQ = True
