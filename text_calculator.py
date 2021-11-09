@@ -35,11 +35,28 @@ NUMBERS = {'один': 1,
 
 ACTIONS = ['плюс', 'минус', 'делить на', 'умножить на']
 
-# def calculation(text: str):
-#     WORDS = text.split()
-#     return WORDS
-#
-#
-# print(calculation('пять плюс три'))
+
+def plus(a: int, b: int) -> int:
+    return a + b
+
+
+def minus(a: int, b: int) -> int:
+    return a - b
+
+
+def division(a: int, b: int) -> int:
+    return int(a / b)
+
+
+def multiply(a: int, b: int) -> int:
+    return a * b
+
+
+def calculation(text: str):
+    WORDS = text.split()
+    return WORDS
+
+
+print(calculation('пять плюс три'))
 
 print(NUMBERS["один"])
