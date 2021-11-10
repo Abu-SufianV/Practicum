@@ -103,8 +103,9 @@ def num_to_text(number: int) -> str:
     :param number: Переводимое число
     :return: Число в письменном виде
     """
+
     if number < 0:
-        sing = False
+        SING = False
 
     number = list(str(abs(number)))
 
@@ -122,7 +123,7 @@ def num_to_text(number: int) -> str:
         else:
             num_3 = get_key(NUMBERS, int(str(number[2]) + str(number[3])))
             total = f"{num_1} {num_2} {num_3} "
-        return total if sing else "минус " + total
+        return total if SING else "минус " + total
     elif len(number) == 3:
         num_1 = get_key(NUMBERS, number[0] * 100)
         if (int(str(number[1]) + str(number[2])) < 11) or (
@@ -133,7 +134,7 @@ def num_to_text(number: int) -> str:
         else:
             num_2 = get_key(NUMBERS, int(str(number[1]) + str(number[2])))
             total = f"{num_1} {num_2}"
-        return total if sing else "минус " + total
+        return total if SING else "минус " + total
     elif len(number) == 2:
         if (int(str(number[0]) + str(number[1])) < 11) or (
                 int(str(number[0]) + str(number[1])) > 19):
@@ -143,10 +144,10 @@ def num_to_text(number: int) -> str:
         else:
             num_1 = get_key(NUMBERS, int(str(number[0]) + str(number[1])))
             total = f"{num_1}"
-        return total if sing else "минус " + total
+        return total if SING else "минус " + total
     else:
         total = get_key(NUMBERS, int(number[0]))
-        return total if sing else "минус " + total
+        return total if SING else "минус " + total
 
 
 def calculation(text: str):
@@ -172,6 +173,4 @@ def calculation(text: str):
             return num_to_text(result)
 
 
-# print(calculation('девять минус два'))
-
-print(num_to_text(-9872))
+print(calculation('девять минус два'))
