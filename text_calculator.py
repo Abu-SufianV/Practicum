@@ -103,6 +103,7 @@ def num_to_text(number: int) -> str:
     :param number: Переводимое число
     :return: Число в письменном виде
     """
+    SING = True
 
     if number < 0:
         SING = False
