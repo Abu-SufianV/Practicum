@@ -97,18 +97,7 @@ def calculation(text: str):
 
             result = action(Num_1, Num_2, act)
 
-            if (result < 11) or (result > 19) and (result > 0):
-                Num_1 = get_key(NUMBERS, (result // 100) * 100)
-                Num_2 = get_key(NUMBERS,
-                                (result // 10) * 10) if result % 10 != 0 \
-                    else ''
-                Num_3 = get_key(NUMBERS,
-                                result % 10) if result % 10 != 0 else ''
-                result = f'{Num_1} {Num_2} {Num_3}'
-            else:
-                result = get_key(NUMBERS, result)
-            return result
+            return num_to_text(result)
 
 
-# print(calculation('пятнадцать умножить на пять'))
-print(num_to_text(333))
+print(calculation('пятнадцать умножить на пять'))
