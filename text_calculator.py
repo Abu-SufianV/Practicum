@@ -45,7 +45,8 @@ NUMBERS = {'ноль': 0,
            'шесть тысяч': 6000,
            'семь тысяч': 7000,
            'восемь тысяч': 8000,
-           'девять тысяч': 9000, }
+           'девять тысяч': 9000,
+           'десять тысяч': 10000}
 
 ACTIONS = ['плюс', 'минус', 'умножить']
 
@@ -63,18 +64,20 @@ def get_key(dictionary, value):
             return k
 
 
-def text_to_num(number: str) -> int:
+def text_to_num(text: str) -> int:
     """
     Переводит число из письменного вида в численный
 
-    :param number: Вводимое число
+    :param text: Вводимое число
     :return: Число в численном виде
     """
     total = 0
-    for num in NUMBERS:
-        if num in number:
+    for num in text.split():
+        if num in NUMBERS:
             total += NUMBERS[num]
-    return total
+    if total <= 100:
+        return total
+
 
 
 def action(number_1: int, number_2: int, act: str) -> int:
@@ -113,7 +116,11 @@ def num_to_text(number: int) -> str:
     for i in range(0, len(number)):
         number[i] = int(number[i])
 
-    if len(number) == 4:
+    if len(number) == 5:
+        num_1 = get_key(NUMBERS, number[0] * 10000)
+        total = f"{num_1}"
+        return total if SING else "минус " + total
+    elif len(number) == 4:
         num_1 = get_key(NUMBERS, number[0] * 1000)
         num_2 = get_key(NUMBERS, number[1] * 100) if number[1] != 0 else ''
         if (int(str(number[2]) + str(number[3])) < 11) or (
@@ -166,12 +173,16 @@ def calculation(text: str):
             First = WORDS[:index]
             Second = WORDS[index:]
 
-            Num_1 = text_to_num(str(First))
-            Num_2 = text_to_num(str(Second))
+            # try:
+            Num_1 = text_to_num(" ".join(First))
+            Num_2 = text_to_num(" ".join(Second))
+            # except ValueError:
+            #     print('Число введено не корректно. Проверьте написание ('
+            #           'допустимое значение от 0 до 100)')
 
             result = action(Num_1, Num_2, act)
 
             return num_to_text(result)
 
 
-print(calculation('девять минус два'))
+print(calculation('девять умножить на сто'))
