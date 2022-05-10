@@ -46,9 +46,12 @@ NUMBERS = {'ноль': 0,
            'семь тысяч': 7000,
            'восемь тысяч': 8000,
            'девять тысяч': 9000,
-           'десять тысяч': 10000}
+           'десять тысяч': 10000,
+           'открыть скобку': '(',
+           'закрыть скобку': ')'
+           }
 
-ACTIONS = ['плюс', 'минус', 'умножить']
+ACTIONS = ['плюс', 'минус', 'умножить', 'степени', 'делить']
 
 
 def get_key(dictionary, value):
@@ -75,9 +78,7 @@ def text_to_num(text: str) -> int:
     for num in text.split():
         if num in NUMBERS:
             total += NUMBERS[num]
-    if total <= 100:
-        return total
-
+    return total
 
 
 def action(number_1: int, number_2: int, act: str) -> int:
@@ -96,6 +97,10 @@ def action(number_1: int, number_2: int, act: str) -> int:
         return number_1 - number_2
     elif act == 'умножить':
         return number_1 * number_2
+    elif act == 'делить':
+        return number_1 // number_2
+    elif act == 'степени':
+        return number_1 ** number_2
 
 
 def num_to_text(number: int) -> str:
@@ -173,16 +178,19 @@ def calculation(text: str):
             First = WORDS[:index]
             Second = WORDS[index:]
 
-            # try:
             Num_1 = text_to_num(" ".join(First))
             Num_2 = text_to_num(" ".join(Second))
-            # except ValueError:
-            #     print('Число введено не корректно. Проверьте написание ('
-            #           'допустимое значение от 0 до 100)')
 
             result = action(Num_1, Num_2, act)
 
             return num_to_text(result)
 
 
-print(calculation('девять умножить на сто'))
+print('\n\nДобро пожаловать в текстовый калькулятор!\n\
+Вы можете проводить операции над числами в письменном виде\n\
+Например: "Тридцать три умножить на одинадцать" -> "триста шестьдесят три"\n\n\
+Возможные значение: от 0 до 100\n\
+Возможные операции: плюс, минус, умножить, делить (нацело), в степени\n\n')
+
+res = calculation(input("Введите выражение: "))
+print(f"Ответ: {res}")

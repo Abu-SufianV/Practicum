@@ -30,7 +30,7 @@ while num_uniq(number) == False:
     number = str(random.randint(0, 9)) + str(random.randint(0, 9)) + str(
         random.randint(0, 9)) + str(random.randint(0, 9))
 
-# print(f"Компьютер загадал: {number}")
+print(f"Компьютер загадал: {number}")
 
 UNIQ = False
 STEP = 1
@@ -64,4 +64,4 @@ while UNIQ == False:
     except ValueError:
         print('Вы неправильно ввели число.')
 
-print(f'ВЫ ОТГАДАЛИ! \nКомпьютер загадал число - {number}')
+print(f'\n\nВЫ ОТГАДАЛИ! \nКомпьютер загадал число - {number}')
