@@ -1,26 +1,45 @@
 import art
-import check_moves
 from random import randint
 from time import sleep
 
+"""
+Шахматы
+
+В данной версии шахмат представлены следующие сложности:
+
+*надо указать
+
+"""
+
+
+# Обозначаем цвета, которые будут использоваться на шахматной доске
 COLOR = {
-    'empty': 0,
+    'empty': 0, # Обозначаются пустые клетки доски
     'black': 1,
     'white': 2
 }
 
+# Словарь из названий слобцов и их нумерацией
 COL = {'A': 1, 'B': 2, 'C': 3, 'D': 4,
        'E': 5, 'F': 6, 'G': 7, 'H': 8}
 
 ROW = [1, 2, 3, 4, 5, 6, 7, 8]
 
+# Словарь для записи ходов
 MOVES_HISTORY = {}
 
 
 class Empty:
+    """
+    Класс создан для обозначения пустых полей на доске
 
+    Если вывести данный объект, то он будет представлен в виде " . "
+    """
     def __init__(self):
         self.color = COLOR['empty']
+
+    def __str__(self):
+        return ' . '
 
     def get_color(self):
         return self.color
@@ -31,16 +50,22 @@ class Empty:
               'Проверьте правильность ввода')
         return []
 
-    def __str__(self):
-        return ' . '
-
 
 class Piece:
+    """
+    Общий класс для всех фигур, которые будут расставлены на доске
+
+    Имеют общий атрибут
+    value:
+
+    И метод
+    get_color: Возвращает цвет фигуры стоящей на указанных координатах
+    """
+    # Массив и строковых значений фигуры
     value = []
 
     def __init__(self, color):
         self.color = color
-        pass
 
     def __str__(self):
         if self.color == COLOR['white']:
@@ -48,13 +73,25 @@ class Piece:
         return self.value[1]
 
     def get_color(self, x: int, y: int) -> int:
+        """
+        Возвращает цвет фигуры, находящаяся на указанных координатах
+        """
         return self.board[x][y].color
 
 
 class Pawn(Piece):
+    """
+    Описание фигуры "Пешка"
+    """
     value = [' P ', ' p ']
 
     def get_moves(self, board, x: int, y: int) -> list:
+        """
+        Принимает на вход координаты фигуры и возвращает список из координат,
+        по которым может передвигаться фигура
+
+        :return: Список координат возможных ходов фигуры
+        """
         possible_moves = []
 
         if self.color == COLOR['black'] \
@@ -82,6 +119,9 @@ class Pawn(Piece):
 
 
 class King(Piece):
+    """
+    Описание фигуры "Король"
+    """
     value = [' K ', ' k ']
 
     def get_moves(self, board, x: int, y: int) -> list:
@@ -143,6 +183,9 @@ class King(Piece):
 
 
 class Queen(Piece):
+    """
+    Описание фигуры "Ферзь"
+    """
     value = [' Q ', ' q ']
 
     def get_moves(self, board, x: int, y: int) -> list:
@@ -226,6 +269,9 @@ class Queen(Piece):
 
 
 class Rook(Piece):
+    """
+    Описание фигуры "Ладья"
+    """
     value = [' R ', ' r ']
 
     def get_moves(self, board, x: int, y: int) -> list:
@@ -311,6 +357,9 @@ class Rook(Piece):
 
 
 class Bishop(Piece):
+    """
+    Описание фигуры "Слон"
+    """
     value = [' B ', ' b ']
 
     def get_moves(self, board, x: int, y: int) -> list:
@@ -394,12 +443,18 @@ class Bishop(Piece):
 
 
 class Knight(Piece):
+    """
+    Описание фигуры "Конь"
+    """
     value = [' N ', ' n ']
 
 
 class Desk:
     """
-    Класс Desk - построение доски и вывод на экран
+    Класс представляет собой шахматную доску
+
+    Создаёт массив объектов (фигур)
+    При выводит на экран, возвращает строковое представление данного массива
     """
 
     def __init__(self):
@@ -456,7 +511,7 @@ class Desk:
 
     def __str__(self):
         """
-        При вызове выводит на экран текущее положение фигур на доске
+        Возвращает строковое представление шахматной доски с актуальным расположением фигур
 
         :return: Шахматная доска в виде строки
         """
@@ -467,12 +522,22 @@ class Desk:
         return f'- - - - - - - - - - - - - - - - - \n\n' + result
 
     def get_color(self, x, y):
+        """
+        Обращается к объекту по указанным координатам и возвращает его цвет
+        """
         return self.board[x][y].color
 
     def get_moves(self, x, y):
+        """
+        Обращается к объекту по указанным координатам и возвращает список
+        возможных ходов данной фигуры
+        """
         return self.board[x][y].get_moves(self, x, y)
 
-    def move(self, point_from, point_to):
+    def move(self, point_from: list[int], point_to: list[int]):
+        """
+        Передвигает фигуру по указанным координатам
+        """
         self.board[point_to[0]][point_to[1]] = self.board[point_from[0]][point_from[1]]
         self.board[point_from[0]][point_from[1]] = Empty()
 
@@ -528,11 +593,19 @@ class TestDesk:
 
 
 class Game:
+    """
+    Является сборным классом
+    Необходим для осуществления геймплея и запуска методов других классов
+    """
     steps = 0
     player_1 = str()
     player_2 = str()
 
     def __init__(self):
+        """
+        При инициализации данного объекта происходит приветсвие
+        После необходим ввод имён двух игроков
+        """
         print('\033[34m')
         art.tprint('CHESS')
 
@@ -550,26 +623,37 @@ class Game:
               "'Подбросим монетку' для определения того, кто начнёт партию\n")
         sleep(2)
 
+
+        # Проходит жеребьёвка, после которой определяется игрок начинающий партию
         num = randint(0, 2)
         if num == 1:
+            start_player = True
             print(f'Партию начинает - {self.player_1}\n')
         else:
+            start_player = False
             print(f'Партию начинает - {self.player_2}\n')
 
-        # sleep(2)
-        # art.tprint('Good   luck!')
-        # sleep(1)
+        sleep(2)
+        art.tprint('Good   luck!')
+        sleep(1)
 
         game_desk = Desk()
         print(game_desk)
 
     def player_step(self, player: str):
+        """
+        Данный метод осущетсвляет ход игрока на шахматной доске
+        """
         if player == self.player_1:
             print(f"\033[36m{player}:\033[38m", end='')
         elif player == self.player_2:
             print(f"\033[33m{player}:\033[38m", end='')
 
+        # Пользователь вводит свой ход в виде строки,
+        # после чего он сразу превращается в список символов
         step = list(input().strip().upper())
+
+        # Валидация введённых данных
         print(step)
         if len(step) != 5:
             print('Неверно указан ход! Повторите попытку')
@@ -583,14 +667,19 @@ class Game:
 
 
 
-# b = TestDesk()
+# b = Desk()
 # print(b)
 #
+# print(b.get_moves(2,5))
+# m = b.get_moves(2,5)
+# b.move([2,5],m[0])
+#
+# print(b)
+
 # print(len(b.get_moves(5, 5)))
 # print(b)
 
 if __name__ == '__main__':
     pass
     game = Game()
-    step_from, step_to = game.player_step(game.player_1)
     print(step_from, step_to)
