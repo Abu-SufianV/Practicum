@@ -1,6 +1,7 @@
-import art
+# import art
 from random import randint
 from time import sleep
+from turtle import st
 
 """
 Шахматы
@@ -14,7 +15,7 @@ from time import sleep
 
 # Обозначаем цвета, которые будут использоваться на шахматной доске
 COLOR = {
-    'empty': 0, # Обозначаются пустые клетки доски
+    'empty': 0,  # Обозначаются пустые клетки доски
     'black': 1,
     'white': 2
 }
@@ -26,7 +27,7 @@ COL = {'A': 1, 'B': 2, 'C': 3, 'D': 4,
 ROW = [1, 2, 3, 4, 5, 6, 7, 8]
 
 # Словарь для записи ходов
-MOVES_HISTORY = {}
+MOVES_HISTORY = []
 
 
 class Empty:
@@ -35,6 +36,7 @@ class Empty:
 
     Если вывести данный объект, то он будет представлен в виде " . "
     """
+
     def __init__(self):
         self.color = COLOR['empty']
 
@@ -471,10 +473,10 @@ class Desk:
 
         for i in range(10):
             # Выводим вертикали и горизонтали
-            self.board[0][i] = '\033[31m' + letter[i] + '\033[38m'
-            self.board[-1][i] = '\033[31m' + letter[i] + '\033[38m'
-            self.board[i][0] = '\033[31m' + num_ord[i] + '\033[38m'
-            self.board[i][-1] = '\033[31m' + num_ord[i] + '\033[38m'
+            self.board[0][i] = '\033[31m' + letter[i] + '\033[39m'
+            self.board[-1][i] = '\033[31m' + letter[i] + '\033[39m'
+            self.board[i][0] = '\033[31m' + num_ord[i] + '\033[39m'
+            self.board[i][-1] = '\033[31m' + num_ord[i] + '\033[39m'
 
             # Раскладываем фигуры на доске
 
@@ -538,7 +540,8 @@ class Desk:
         """
         Передвигает фигуру по указанным координатам
         """
-        self.board[point_to[0]][point_to[1]] = self.board[point_from[0]][point_from[1]]
+        self.board[point_to[0]][point_to[1]
+                                ] = self.board[point_from[0]][point_from[1]]
         self.board[point_from[0]][point_from[1]] = Empty()
 
 
@@ -588,7 +591,8 @@ class TestDesk:
         return self.board[x][y].get_moves(self, x, y)
 
     def move(self, point_from, point_to):
-        self.board[point_to[0]][point_to[1]] = self.board[point_from[0]][point_from[1]]
+        self.board[point_to[0]][point_to[1]
+                                ] = self.board[point_from[0]][point_from[1]]
         self.board[point_from[0]][point_from[1]] = Empty()
 
 
@@ -598,8 +602,9 @@ class Game:
     Необходим для осуществления геймплея и запуска методов других классов
     """
     steps = 0
-    player_1 = str()
-    player_2 = str()
+    players = ['', '']
+    desk = None
+    start_player = 0
 
     def __init__(self):
         """
@@ -607,64 +612,77 @@ class Game:
         После необходим ввод имён двух игроков
         """
         print('\033[34m')
-        art.tprint('CHESS')
+        # art.tprint('CHESS')
 
         print("Добро пожаловать в наш небольшой шахматный мир!\n"
               "Пожалуйста, представьтесь")
 
-        print('\033[36m')
-        self.player_1 = input('Игрок 1: ')
+        print('\033[32m')
+        self.players[0] = input('Игрок 1: ')
 
         print('\033[33m')
-        self.player_2 = input('Игрок 2: ')
-        print('\033[38m')
+        self.players[1] = input('Игрок 2: ')
+        print('\033[39m')
 
         print("ОТЛИЧНО!\n"
               "'Подбросим монетку' для определения того, кто начнёт партию\n")
         sleep(2)
 
-
         # Проходит жеребьёвка, после которой определяется игрок начинающий партию
         num = randint(0, 2)
         if num == 1:
-            start_player = True
-            print(f'Партию начинает - {self.player_1}\n')
+            print(f'Партию начинает - {self.players[0]}\n')
         else:
-            start_player = False
-            print(f'Партию начинает - {self.player_2}\n')
+            self.start_player = 1
+            print(f'Партию начинает - {self.players[1]}\n')
 
-        sleep(2)
-        art.tprint('Good   luck!')
-        sleep(1)
+        # sleep(2)
+        # art.tprint('Good   luck!')
+        # sleep(1)
 
-        game_desk = Desk()
-        print(game_desk)
+        self.desk = Desk()
+        print(self.desk)
 
-    def player_step(self, player: str):
+    def player_step(self, player: str) -> tuple:
         """
         Данный метод осущетсвляет ход игрока на шахматной доске
         """
-        if player == self.player_1:
-            print(f"\033[36m{player}:\033[38m", end='')
-        elif player == self.player_2:
-            print(f"\033[33m{player}:\033[38m", end='')
+
+        # Определение игрока
+        if player == 0:
+            print(f"\033[32m{self.players[0]}: \033[39m", end='')
+        elif player == 1:
+            print(f"\033[33m{self.players[1]}: \033[39m", end='')
 
         # Пользователь вводит свой ход в виде строки,
-        # после чего он сразу превращается в список символов
+        # после чего он сразу преобразуется в список символов
+
         step = list(input().strip().upper())
 
+        # Для прекращении партии необходимо ввести слово "stop"
+        if ''.join(step) == 'STOP':
+            return 'STOP'
+
         # Валидация введённых данных
-        print(step)
         if len(step) != 5:
-            print('Неверно указан ход! Повторите попытку')
+            print('Ход указан не в верном формате!\n'
+                  'Пример прафильного формата: b2-b3\n\n'
+                  'Повторите попытку')
         elif step[2] != '-':
             print('Между указанными ячейками должно быть тире')
         elif int(step[1]) not in ROW and int(step[4]) not in ROW:
             print('Вторым символом ячейки должно быть число от 1 до 8')
         elif step[0] not in COL or step[3] not in COL:
             print('Вторым символом ячейки должна быть буква от A до H')
-        return (COL[step[0]],int(step[1])), (COL[step[3]],int(step[4]))
 
+        from_to = [[9-int(step[1]), COL[step[0]]],
+                   [9-int(step[4]), COL[step[3]]]]
+
+        if from_to[1] in self.desk.get_moves(from_to[0][0], from_to[0][1]):
+            self.desk.move(from_to[0], from_to[1])
+            return ''.join(step)
+
+        return False
 
 
 # b = Desk()
@@ -675,11 +693,35 @@ class Game:
 # b.move([2,5],m[0])
 #
 # print(b)
-
 # print(len(b.get_moves(5, 5)))
 # print(b)
 
 if __name__ == '__main__':
-    pass
     game = Game()
-    print(step_from, step_to)
+    all_moves = ''
+    amount_moves = 0
+    player = game.start_player
+
+    while True:
+
+        step = game.player_step(player % 2)
+
+        if step == 'STOP':
+            print("\n\n\nПАРТИЯ ОКОНЧЕНА!\nСпасибо за игру)\n\n")
+            break
+
+        if step == False:
+            break
+        else:
+            all_moves += step
+            player += 1
+
+        if len(all_moves) > 8:
+            amount_moves += 1
+            MOVES_HISTORY.append(
+                f'{amount_moves}. {all_moves[:5]} | {all_moves[5:]}')
+            all_moves = ''
+
+    print(*MOVES_HISTORY, sep='\n')
+
+    # print(step_from, step_to)
