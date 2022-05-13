@@ -195,7 +195,11 @@ class Queen(Piece):
     def get_moves(self, board, x: int, y: int) -> list:
         possible_moves = []
 
+<<<<<<< HEAD
         # Проверка для белых фигур по вертикали/горизонтали
+=======
+        # Проверка для белых фигур
+>>>>>>> main
         if self.color == COLOR['white']:
 
             for i in range(1, 9 - x):
@@ -234,6 +238,7 @@ class Queen(Piece):
                 elif board.get_color(x, y - i) == COLOR['white']:
                     break
 
+<<<<<<< HEAD
             # Проверка для белых фигур по диагоналям
             for i in range(1, 9):
                 try:
@@ -284,6 +289,9 @@ class Queen(Piece):
                     break
 
         # Проверка для чёрных фигур по вертикали/горизонтали
+=======
+        # Проверка для чёрных фигур
+>>>>>>> main
         if self.color == COLOR['black']:
 
             for i in range(1, 9 - x):
@@ -322,6 +330,7 @@ class Queen(Piece):
                 elif board.get_color(x, y - i) == COLOR['white']:
                     break
 
+<<<<<<< HEAD
             # Проверка для чёрных фигур по диагоналям
             for i in range(1,9):
                 try:
@@ -371,6 +380,8 @@ class Queen(Piece):
                 except Exception:
                     break
 
+=======
+>>>>>>> main
         return possible_moves
 
 
@@ -475,6 +486,7 @@ class Bishop(Piece):
 
         if self.color == COLOR['white']:
 
+<<<<<<< HEAD
             for i in range(1,9):
                 try:
                     if board.get_color(x + i, y + i) == COLOR['empty']:
@@ -575,6 +587,17 @@ class Bishop(Piece):
 
 
         return possible_moves
+=======
+            for i in range(9):
+                for j in range(9):
+                    if board.get_color(x + i, y + j) == COLOR['empty']:
+                        possible_moves.append([x, y - i])
+                    elif board.get_color(x + i, y + j) == COLOR['black']:
+                        possible_moves.append([x, y - i])
+                        break
+                    else:
+                        break
+>>>>>>> main
 
 
 class Knight(Piece):
@@ -805,6 +828,7 @@ class TestDesk:
             self.board[-1][i] = '\033[31m' + letter[i] + '\033[39m'
             self.board[i][0] = '\033[31m' + num_ord[i] + '\033[39m'
             self.board[i][-1] = '\033[31m' + num_ord[i] + '\033[39m'
+<<<<<<< HEAD
 
         self.board[5][4] = Bishop(COLOR['white'])
         self.board[7][2] = Pawn(COLOR['white'])
@@ -827,6 +851,29 @@ class TestDesk:
         """
         return self.board[x][y].color
 
+=======
+
+        self.board[5][4] = Bishop(COLOR['white'])
+
+    def __str__(self):
+        """
+        Возвращает строковое представление шахматной доски с актуальным расположением фигур
+
+        :return: Шахматная доска в виде строки
+        """
+        result = str()
+        for i in range(10):
+            result += ''.join(map(str, self.board[i])) + '\n'
+
+        return f'\n- - - - - - - - - - - - - - - - - \n\n' + result
+
+    def get_color(self, x, y):
+        """
+        Обращается к объекту по указанным координатам и возвращает его цвет
+        """
+        return self.board[x][y].color
+
+>>>>>>> main
     def get_moves(self, x, y):
         """
         Обращается к объекту по указанным координатам и возвращает список
@@ -845,8 +892,13 @@ class TestDesk:
 
 desk = TestDesk()
 print(desk)
+<<<<<<< HEAD
 print(desk.get_moves(5, 4))
 # print(*desk.get_moves(5, 4),sep='\n')
+=======
+
+print(desk.get_moves(5, 4))
+>>>>>>> main
 
 
 # if __name__ == '__main__':
