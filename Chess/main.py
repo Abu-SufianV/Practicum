@@ -195,7 +195,7 @@ class Queen(Piece):
     def get_moves(self, board, x: int, y: int) -> list:
         possible_moves = []
 
-        # Проверка для белых фигур
+        # Проверка для белых фигур по вертикали/горизонтали
         if self.color == COLOR['white']:
 
             for i in range(1, 9 - x):
@@ -234,7 +234,56 @@ class Queen(Piece):
                 elif board.get_color(x, y - i) == COLOR['white']:
                     break
 
-        # Проверка для чёрных фигур
+            # Проверка для белых фигур по диагоналям
+            for i in range(1, 9):
+                try:
+                    if board.get_color(x + i, y + i) == COLOR['empty']:
+                        possible_moves.append([x + i, y + i])
+                    elif board.get_color(x + i, y + i) == COLOR['black']:
+                        possible_moves.append([x + i, y + i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1, 9):
+                try:
+                    if board.get_color(x + i, y - i) == COLOR['empty']:
+                        possible_moves.append([x + i, y - i])
+                    elif board.get_color(x + i, y - i) == COLOR['black']:
+                        possible_moves.append([x + i, y - i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1, 9):
+                try:
+                    if board.get_color(x - i, y - i) == COLOR['empty']:
+                        possible_moves.append([x - i, y - i])
+                    elif board.get_color(x - i, y - i) == COLOR['black']:
+                        possible_moves.append([x - i, y - i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1, 9):
+                try:
+                    if board.get_color(x - i, y + i) == COLOR['empty']:
+                        possible_moves.append([x - i, y + i])
+                    elif board.get_color(x - i, y + i) == COLOR['black']:
+                        possible_moves.append([x - i, y + i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+        # Проверка для чёрных фигур по вертикали/горизонтали
         if self.color == COLOR['black']:
 
             for i in range(1, 9 - x):
@@ -271,6 +320,55 @@ class Queen(Piece):
                     possible_moves.append([x, y - i])
                     break
                 elif board.get_color(x, y - i) == COLOR['white']:
+                    break
+
+            # Проверка для чёрных фигур по диагоналям
+            for i in range(1,9):
+                try:
+                    if board.get_color(x + i, y + i) == COLOR['empty']:
+                        possible_moves.append([x + i, y + i])
+                    elif board.get_color(x + i, y + i) == COLOR['white']:
+                        possible_moves.append([x + i, y + i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x + i, y - i) == COLOR['empty']:
+                        possible_moves.append([x + i, y - i])
+                    elif board.get_color(x + i, y - i) == COLOR['white']:
+                        possible_moves.append([x + i, y - i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x - i, y - i) == COLOR['empty']:
+                        possible_moves.append([x - i, y - i])
+                    elif board.get_color(x - i, y - i) == COLOR['white']:
+                        possible_moves.append([x - i, y - i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x - i, y + i) == COLOR['empty']:
+                        possible_moves.append([x - i, y + i])
+                    elif board.get_color(x - i, y + i) == COLOR['white']:
+                        possible_moves.append([x - i, y + i])
+                        break
+                    else:
+                        break
+                except Exception:
                     break
 
         return possible_moves
@@ -377,15 +475,106 @@ class Bishop(Piece):
 
         if self.color == COLOR['white']:
 
-            for i in range(9):
-                for j in range(9):
-                    if board.get_color(x + i, y + j) == COLOR['empty']:
-                        possible_moves.append([x, y - i])
-                    elif board.get_color(x + i, y + j) == COLOR['black']:
-                        possible_moves.append([x, y - i])
+            for i in range(1,9):
+                try:
+                    if board.get_color(x + i, y + i) == COLOR['empty']:
+                        possible_moves.append([x + i, y + i])
+                    elif board.get_color(x + i, y + i) == COLOR['black']:
+                        possible_moves.append([x + i, y + i])
                         break
                     else:
                         break
+                except Exception:
+                    break
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x + i, y - i) == COLOR['empty']:
+                        possible_moves.append([x + i, y - i])
+                    elif board.get_color(x + i, y - i) == COLOR['black']:
+                        possible_moves.append([x + i, y - i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x - i, y - i) == COLOR['empty']:
+                        possible_moves.append([x - i, y - i])
+                    elif board.get_color(x - i, y - i) == COLOR['black']:
+                        possible_moves.append([x - i, y - i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x - i, y + i) == COLOR['empty']:
+                        possible_moves.append([x - i, y + i])
+                    elif board.get_color(x - i, y + i) == COLOR['black']:
+                        possible_moves.append([x - i, y + i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+        if self.color == COLOR['black']:
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x + i, y + i) == COLOR['empty']:
+                        possible_moves.append([x + i, y + i])
+                    elif board.get_color(x + i, y + i) == COLOR['white']:
+                        possible_moves.append([x + i, y + i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x + i, y - i) == COLOR['empty']:
+                        possible_moves.append([x + i, y - i])
+                    elif board.get_color(x + i, y - i) == COLOR['white']:
+                        possible_moves.append([x + i, y - i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x - i, y - i) == COLOR['empty']:
+                        possible_moves.append([x - i, y - i])
+                    elif board.get_color(x - i, y - i) == COLOR['white']:
+                        possible_moves.append([x - i, y - i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+            for i in range(1,9):
+                try:
+                    if board.get_color(x - i, y + i) == COLOR['empty']:
+                        possible_moves.append([x - i, y + i])
+                    elif board.get_color(x - i, y + i) == COLOR['white']:
+                        possible_moves.append([x - i, y + i])
+                        break
+                    else:
+                        break
+                except Exception:
+                    break
+
+
+        return possible_moves
 
 
 class Knight(Piece):
@@ -618,6 +807,7 @@ class TestDesk:
             self.board[i][-1] = '\033[31m' + num_ord[i] + '\033[39m'
 
         self.board[5][4] = Bishop(COLOR['white'])
+        self.board[7][2] = Pawn(COLOR['white'])
 
     def __str__(self):
         """
@@ -655,8 +845,8 @@ class TestDesk:
 
 desk = TestDesk()
 print(desk)
-
 print(desk.get_moves(5, 4))
+# print(*desk.get_moves(5, 4),sep='\n')
 
 
 # if __name__ == '__main__':
