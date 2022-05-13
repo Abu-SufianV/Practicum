@@ -93,6 +93,7 @@ class Pawn(Piece):
         """
         possible_moves = []
 
+        # Проверка для чёрных фигур
         if self.color == COLOR['black'] \
                 and x == 2 \
                 and board.get_color(x + 1, y) == COLOR['empty'] \
@@ -103,7 +104,9 @@ class Pawn(Piece):
                 and x >= 2 \
                 and board.get_color(x + 1, y) == COLOR['empty']:
             possible_moves.append([x + 1, y])
-        elif self.color == COLOR['white'] \
+
+        # Проверка для белых фигур
+        if self.color == COLOR['white'] \
                 and x == 7 \
                 and board.get_color(x - 1, y) == COLOR['empty'] \
                 and board.get_color(x - 2, y) == COLOR['empty']:
@@ -126,6 +129,7 @@ class King(Piece):
     def get_moves(self, board, x: int, y: int) -> list:
         possible_moves = []
 
+        # Проверка для белых фигур
         if self.color == COLOR['white']:
 
             if board.get_color(x - 1, y) != COLOR['white']:
@@ -152,7 +156,8 @@ class King(Piece):
             if board.get_color(x, y + 1) != COLOR['white']:
                 possible_moves.append([x, y + 1])
 
-        elif self.color == COLOR['black']:
+        # Проверка для чёрных фигур
+        if self.color == COLOR['black']:
 
             if board.get_color(x - 1, y) != COLOR['black']:
                 possible_moves.append([x - 1, y])
@@ -190,6 +195,7 @@ class Queen(Piece):
     def get_moves(self, board, x: int, y: int) -> list:
         possible_moves = []
 
+        # Проверка для белых фигур
         if self.color == COLOR['white']:
 
             for i in range(1, 9 - x):
@@ -228,7 +234,8 @@ class Queen(Piece):
                 elif board.get_color(x, y - i) == COLOR['white']:
                     break
 
-        elif self.color == COLOR['black']:
+        # Проверка для чёрных фигур
+        if self.color == COLOR['black']:
 
             for i in range(1, 9 - x):
                 if board.get_color(x + i, y) == COLOR['empty']:
@@ -278,6 +285,7 @@ class Rook(Piece):
     def get_moves(self, board, x: int, y: int) -> list:
         possible_moves = []
 
+        # Проверка для белых фигур
         if self.color == COLOR['white']:
 
             for i in range(1, 9 - x):
@@ -316,7 +324,8 @@ class Rook(Piece):
                 elif board.get_color(x, y - i) == COLOR['white']:
                     break
 
-        elif self.color == COLOR['black']:
+        # Проверка для чёрных фигур
+        if self.color == COLOR['black']:
 
             for i in range(1, 9 - x):
                 if board.get_color(x + i, y) == COLOR['empty']:
@@ -365,6 +374,18 @@ class Bishop(Piece):
 
     def get_moves(self, board, x: int, y: int) -> list:
         possible_moves = []
+
+        if self.color == COLOR['white']:
+
+            for i in range(9):
+                for j in range(9):
+                    if board.get_color(x + i, y + j) == COLOR['empty']:
+                        possible_moves.append([x, y - i])
+                    elif board.get_color(x + i, y + j) == COLOR['black']:
+                        possible_moves.append([x, y - i])
+                        break
+                    else:
+                        break
 
 
 class Knight(Piece):
@@ -444,7 +465,7 @@ class Desk:
         for i in range(10):
             result += ''.join(map(str, self.board[i])) + '\n'
 
-        return f'- - - - - - - - - - - - - - - - - \n\n' + result
+        return f'\n- - - - - - - - - - - - - - - - - \n\n' + result
 
     def get_color(self, x, y):
         """
@@ -463,17 +484,6 @@ class Desk:
         """
         Передвигает фигуру по указанным координатам
         """
-        self.board[point_to[0]][point_to[1]
-                                ] = self.board[point_from[0]][point_from[1]]
-        self.board[point_from[0]][point_from[1]] = Empty()
-
-    def get_color(self, x, y):
-        return self.board[x][y].color
-
-    def get_moves(self, x, y):
-        return self.board[x][y].get_moves(self, x, y)
-
-    def move(self, point_from, point_to):
         self.board[point_to[0]][point_to[1]
                                 ] = self.board[point_from[0]][point_from[1]]
         self.board[point_from[0]][point_from[1]] = Empty()
@@ -574,55 +584,124 @@ class Game:
             self.desk.move(from_to[0], from_to[1])
             return ''.join(step)
         else:
-            return [False, 'Вы пытаетесь переместить пустую ячейку']
+            return [False, 'Данная фигара не может так ходить, либо Вы пытаетесь переместить пустую ячейку']
 
     def desk_upload(self):
         print(self.desk)
 
 
-if __name__ == '__main__':
-    game = Game()
-    all_moves = ''
-    amount_moves = 0
-    player = game.start_player
+class TestDesk:
+    """
+    Класс представляет собой шахматную доску
 
-    while True:
+    Создаёт массив объектов (фигур)
+    При выводит на экран, возвращает строковое представление данного массива
+    """
 
-        step = game.player_step(player % 2)
+    def __init__(self):
+        """
+        Инициализируем доску 8х8 с нумерацией и обозначением полей
+        """
 
-        if step == 'STOP':
-            print("\n\n\nПАРТИЯ ОКОНЧЕНА!\nСпасибо за игру)\n\n")
-            break
+        letter = ['   ', ' A ', ' B ', ' C ', ' D ',
+                  ' E ', ' F ', ' G ', ' H ', '   ']
+        num_ord = ['   ', ' 8 ', ' 7 ', ' 6 ',
+                   ' 5 ', ' 4 ', ' 3 ', ' 2 ', ' 1 ', '   ']
 
-        # Проверка ходов на валидность
-        # При возникновении ошибок ход повторяется
-        if step[0] == False:
-            print("\nОшибка!\n")
-            if step[1] == '':
-                print("Данная фигура не может так ходить\n"
-                      "Повторите попытку\n")
-            else:
-                print(step[1]+'\n')
-            continue
-        else:
-            game.desk_upload()
-            all_moves += step
-            player += 1
+        self.board = [[Empty() for _ in range(10)] for _ in range(10)]
 
-        # Добавление ходов в список MOVES_HISTORY
-        if len(all_moves) > 8:
-            amount_moves += 1
-            MOVES_HISTORY.append(
-                f'{amount_moves}. {all_moves[:5]} | {all_moves[5:]}')
-            all_moves = ''
+        for i in range(10):
+            # Выводим вертикали и горизонтали
+            self.board[0][i] = '\033[31m' + letter[i] + '\033[39m'
+            self.board[-1][i] = '\033[31m' + letter[i] + '\033[39m'
+            self.board[i][0] = '\033[31m' + num_ord[i] + '\033[39m'
+            self.board[i][-1] = '\033[31m' + num_ord[i] + '\033[39m'
 
-    # Запись ходов в файл из списка MOVES_HISTORY
-    # Масква файла: party_res_<DAY>_<MONTH>_<YEAR>__<HOURS>_<MINUTES>
-    if len(MOVES_HISTORY) > 0:
-        today = datetime.now()
-        filename = f'party_res_{today.day}_{today.month}_{today.year}__{today.hour}_{today.minute}.txt'
-        with open(filename, 'w', encoding='utf8') as FILE:
-            FILE.write(
-                f'   {game.players[game.start_player%2]} | {game.players[(game.start_player+1)%2]}\n')
-            for line in MOVES_HISTORY:
-                FILE.write(line + '\n')
+        self.board[5][4] = Bishop(COLOR['white'])
+
+    def __str__(self):
+        """
+        Возвращает строковое представление шахматной доски с актуальным расположением фигур
+
+        :return: Шахматная доска в виде строки
+        """
+        result = str()
+        for i in range(10):
+            result += ''.join(map(str, self.board[i])) + '\n'
+
+        return f'\n- - - - - - - - - - - - - - - - - \n\n' + result
+
+    def get_color(self, x, y):
+        """
+        Обращается к объекту по указанным координатам и возвращает его цвет
+        """
+        return self.board[x][y].color
+
+    def get_moves(self, x, y):
+        """
+        Обращается к объекту по указанным координатам и возвращает список
+        возможных ходов данной фигуры
+        """
+        return self.board[x][y].get_moves(self, x, y)
+
+    def move(self, point_from: list[int], point_to: list[int]):
+        """
+        Передвигает фигуру по указанным координатам
+        """
+        self.board[point_to[0]][point_to[1]
+                                ] = self.board[point_from[0]][point_from[1]]
+        self.board[point_from[0]][point_from[1]] = Empty()
+
+
+desk = TestDesk()
+print(desk)
+
+print(desk.get_moves(5, 4))
+
+
+# if __name__ == '__main__':
+#     game = Game()
+#     all_moves = ''
+#     amount_moves = 0
+#     player = game.start_player
+
+#     while True:
+
+#         step = game.player_step(player % 2)
+
+#         if step == 'STOP':
+#             print("\n\n\nПАРТИЯ ОКОНЧЕНА!\nСпасибо за игру)\n\n")
+#             break
+
+#         # Проверка ходов на валидность
+#         # При возникновении ошибок ход повторяется
+#         if step[0] == False:
+#             print("\nОшибка!\n")
+#             if step[1] == '':
+#                 print("Данная фигура не может так ходить\n"
+#                       "Повторите попытку\n")
+#             else:
+#                 print(step[1]+'\n')
+#             continue
+#         else:
+#             game.desk_upload()
+#             all_moves += step
+#             player += 1
+
+#         # Добавление ходов в список MOVES_HISTORY
+#         if len(all_moves) > 8:
+#             amount_moves += 1
+#             MOVES_HISTORY.append(
+#                 f'{amount_moves}. {all_moves[:5]} | {all_moves[5:]}')
+#             all_moves = ''
+
+#     # Запись ходов в файл из списка MOVES_HISTORY
+#     # Масква файла: party_res_<DAY>_<MONTH>_<YEAR>__<HOURS>_<MINUTES>
+#     if len(MOVES_HISTORY) > 0:
+#         today = datetime.now()
+#         filename = f'party_res_{today.day}_{today.month}_{today.year}__{today.hour}_{today.minute}.txt'
+#         with open(filename, 'w', encoding='utf8') as FILE:
+#             FILE.write(
+#                 f'   {game.players[game.start_player%2]} | {game.players[(game.start_player+1)%2]}\n')
+#             for line in MOVES_HISTORY:
+#                 FILE.write(line + '\n')
