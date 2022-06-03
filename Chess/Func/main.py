@@ -634,6 +634,8 @@ def player_step(board: list, player: int):
     # Для прекращении партии необходимо ввести слово "stop"
     if ''.join(step) == 'STOP':
         return 'STOP'
+    elif ''.join(step) == 'ROLLBACK':
+        return 'ROLLBACK'
 
     # Валидация введённых данных
     if len(step) != 5:
@@ -702,6 +704,9 @@ ROW = [1, 2, 3, 4, 5, 6, 7, 8]
 # Список для записи ходов
 MOVES_HISTORY = []
 
+# Список ходов для отката
+MOVES_ROLLBACK = []
+
 # Список с именами игроков
 PLAYERS = ['Player #1', 'Player #2']
 
@@ -752,7 +757,7 @@ DESK = [
 ]
 
 if __name__ == '__main__':
-    greeting(PLAYERS, START_PLAYER)
+    # greeting(PLAYERS, START_PLAYER)
 
     desk_show(DESK)
 
@@ -762,6 +767,22 @@ if __name__ == '__main__':
         if step == 'STOP':
             print("\n\nПАРТИЯ ОКОНЧЕНА!\nСпасибо за игру)\n")
             break
+
+        if step == 'ROLLBACK':
+            if len(MOVES_ROLLBACK) > 0:
+
+                rollback_step_from = MOVES_ROLLBACK[-1][3:]
+                rollback_step_to = MOVES_ROLLBACK[-1][:2]
+
+                MOVES_ROLLBACK.pop()
+
+
+                piece_move(DESK, [9 - int(rollback_step_from[1]), COL[rollback_step_from[0]]],
+                           [9 - int(rollback_step_to[1]), COL[rollback_step_to[0]]])
+                print(f'Сделан откат хода из {rollback_step_from} в {rollback_step_to}')
+            else:
+                print('Ходов ещё не было сделано, ОТКАТ НЕВОЗМОЖЕН!')
+                continue
 
         # Проверка ходов на валидность
         # При возникновении ошибок ход повторяется
@@ -776,6 +797,8 @@ if __name__ == '__main__':
         else:
             desk_show(DESK)
             ALL_MOVES += step
+            if step != 'ROLLBACK':
+                MOVES_ROLLBACK.append(step)
             START_PLAYER += 1
 
         # Добавление ходов в список MOVES_HISTORY
