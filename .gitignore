@@ -50,4 +50,5 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-#
+# Custom files
+party_res_*.txt
