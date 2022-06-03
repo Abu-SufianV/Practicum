@@ -729,8 +729,7 @@ class Desk:
         """
         Передвигает фигуру по указанным координатам
         """
-        self.board[point_to[0]][point_to[1]
-        ] = self.board[point_from[0]][point_from[1]]
+        self.board[point_to[0]][point_to[1]] = self.board[point_from[0]][point_from[1]]
         self.board[point_from[0]][point_from[1]] = Empty()
 
 
@@ -770,8 +769,6 @@ class Game:
             sleep(1)
             print(' . ', end='')
 
-
-
         # Проходит жеребьёвка, после которой определяется игрок начинающий партию
         num = randint(0, 2)
         print('\n')
@@ -789,7 +786,7 @@ class Game:
         self.desk = Desk()
         self.desk_upload()
 
-    def player_step(self, player: str):
+    def player_step(self, player: int):
         """
         Данный метод осущетсвляет ход игрока на шахматной доске
         """
