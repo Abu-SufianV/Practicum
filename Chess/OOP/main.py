@@ -729,7 +729,8 @@ class Desk:
         """
         Передвигает фигуру по указанным координатам
         """
-        self.board[point_to[0]][point_to[1]] = self.board[point_from[0]][point_from[1]]
+        self.board[point_to[0]][point_to[1]
+                                ] = self.board[point_from[0]][point_from[1]]
         self.board[point_from[0]][point_from[1]] = Empty()
 
 
@@ -739,7 +740,7 @@ class Game:
     Необходим для осуществления геймплея и запуска методов других классов
     """
     steps = 0
-    players = ['', '']
+    players = ['Player #1', 'Player #2']
     desk = None
     start_player = 0
 
@@ -755,10 +756,14 @@ class Game:
               "Пожалуйста, представьтесь")
 
         print('\033[32m')
-        self.players[0] = input('Игрок 1: ')
+        name = input('Игрок 1: ')
+        if name != '':
+            self.players[0] = name
 
         print('\033[33m')
-        self.players[1] = input('Игрок 2: ')
+        name = input('Игрок 2: ')
+        if name != '':
+            self.players[1] = name
         print('\033[39m')
 
         print("ОТЛИЧНО!\n"
