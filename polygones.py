@@ -32,10 +32,11 @@ class Triangle_Cust():
 
         for _ in range(self.amount):
 
-            dots = np.array([[1+distance, 1],
-                             [average(1, self.size) + distance, self.size],
-                             [self.size + distance, 1],
-                             [1 + distance, 1]])
+            dots = np.array([[1 + distance, 1 + distance],
+                             [average(1, self.size) + distance,
+                              self.size + distance],
+                             [self.size + distance, 1 + distance],
+                             [1 + distance, 1 + distance]])
 
             ax.add_patch(Polygon(dots,
                                  edgecolor=self.color,
@@ -60,29 +61,29 @@ class Triangle_Cust():
         self.size = 2 if self.size <= 1 else self.size
 
         for _ in range(self.amount):
-            x = 1
 
-            dots = np.array([[1+distance, 1],
-                             [average(1, self.size) + distance, self.size],
-                             [self.size + distance, 1],
-                             [1 + distance, 1]])
+            dots = np.array([[1 + distance, 1 + distance],
+                             [average(1, self.size) + distance,
+                              self.size + distance],
+                             [self.size + distance, 1 + distance],
+                             [1 + distance, 1 + distance]])
 
             triang = Polygon(dots,
                              edgecolor=self.color,
                              facecolor=self.color)
 
-            # print(triang.get_xy(), -40, triang.get_xy()
-            #       [0], end='\n\n\n', sep='|||')
+            triang.set_xy(
+                self.rotate(
+                    triang.get_xy(),
+                    degrees,
+                    triang.get_xy()[0])
+            )
 
-            triang.set_xy(self.rotate(
-                triang.get_xy(), -40, triang.get_xy()[0]))
             ax.add_patch(triang)
 
             distance += self.size + self.step
 
     def tr_translate(self, x: int, y: int):
-        for _ in range(self.amount):
-            ax.patches.pop()
 
         distance = 0
 
@@ -90,10 +91,11 @@ class Triangle_Cust():
 
         for _ in range(self.amount):
 
-            dots = np.array([[1+distance+x, 1+y],
-                             [average(1, self.size) + distance+x, self.size+y],
-                             [self.size + distance+x, 1+y],
-                             [1 + distance+x, 1+y]])
+            dots = np.array([[1 + distance + x, 1 + y + distance],
+                             [average(1, self.size) + distance +
+                              x, self.size + y + distance],
+                             [self.size + distance + x, 1 + y + distance],
+                             [1 + distance + x, 1 + y + distance]])
 
             ax.add_patch(Polygon(dots,
                                  edgecolor=self.color,
@@ -108,10 +110,11 @@ class Triangle_Cust():
 
         for _ in range(self.amount):
 
-            dots = np.array([[1+distance, self.size+y],
-                             [average(1, self.size) + distance, 1+y],
-                             [self.size + distance, self.size+y],
-                             [1 + distance, self.size+y]])
+            dots = np.array([[1 + distance, self.size + y + distance],
+                             [average(1, self.size) + distance,
+                              1 + y + distance],
+                             [self.size + distance, self.size + y + distance],
+                             [1 + distance, self.size + y + distance]])
 
             ax.add_patch(Polygon(dots,
                                  edgecolor=self.color,
@@ -121,8 +124,6 @@ class Triangle_Cust():
 
 
 class Polygon_Cust():
-    color = 'red'
-    dots = np.array([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]])
 
     def __init__(self, color: str, *dots):
         self.color = color
@@ -135,53 +136,82 @@ class Polygon_Cust():
 
 
 class Rectangle_Cust():
-    def get_figure(width: int, height: int, amount=1, step=5) -> None:
 
-        amount = 1 if amount <= 0 else amount
-        step = 1 if step <= 0 else step
+    def __init__(self, width: int, height: int, amount=1, step=5, color='red'):
+        self.width = width
+        self.height = height
+        self.amount = amount
+        self.step = step
+        self.color = color
 
-        distance = 0
+    def get_figure(self) -> None:
 
-        for _ in range(1, amount+1):
-            rect = Rectangle((distance, 1), width, height, linewidth=1,
-                             edgecolor='red', facecolor='red')
+        self.amount = 1 if self.amount <= 0 else self.amount
+        self.step = 1 if self.step <= 0 else self.step
+
+        distance_width = 0
+        distance_height = 0
+
+        for _ in range(self.amount):
+            rect = Rectangle((distance_width, distance_height), self.width, self.height,
+                             edgecolor=self.color, facecolor=self.color)
 
             ax.add_patch(rect)
 
-            distance += width + step
+            distance_width += self.width + self.step
+            distance_height += self.height + self.step
 
 
 class Hexagon_Cust():
-    def get_figure(size: int, amount: int, step: int):
+
+    def __init__(self, size: int, amount: int, step: int, color: str):
+        self.size = size
+        self.amount = amount
+        self.step = step
+        self.color = color
+
+    def get_figure(self):
         distance = 0
 
-        size = 2 if size <= 1 else size
+        self.size = 2 if self.size <= 1 else self.size
 
-        for _ in range(amount):
-            dots = np.array([[1 + distance, 0],
-                            [0 + distance, 1],
-                            [0 + distance, 2],
-                            [1 + distance, 3],
-                            [2 + distance, 3],
-                            [3 + distance, 2],
-                            [3 + distance, 1],
-                            [2 + distance, 0],
-                            [1 + distance, 0]])
-            ax.add_patch(Polygon(dots, edgecolor='gray', facecolor='gray'))
-            distance += size*2+step
+        for _ in range(self.amount):
+            dots = np.array([[1 + distance, 0 + distance],
+                            [0 + distance, 1 + distance],
+                            [0 + distance, 2 + distance],
+                            [1 + distance, 3 + distance],
+                            [2 + distance, 3 + distance],
+                            [3 + distance, 2 + distance],
+                            [3 + distance, 1 + distance],
+                            [2 + distance, 0 + distance],
+                            [1 + distance, 0 + distance]])
+            ax.add_patch(
+                Polygon(dots, edgecolor=self.color, facecolor=self.color))
+            distance += self.size*2+self.step
 
 
-# sequence = Polygon_Cust('red', [0, 0], [0, 1], [1, 1], [2, 2], [1, 0], [0, 0])
-sequence = Triangle_Cust(2, 5, 1, 'red')
-# sequence = Rectangle_Cust()
-# sequence = Hexagon_Cust()
+def iter(size, amount, step):
+    figures = [
+        Polygon_Cust('black', [0, 0], [0, 1], [1, 1], [2, 2], [1, 0], [0, 0]),
+        Rectangle_Cust(size, size, amount, step, 'red'),
+        Triangle_Cust(size, amount, step, 'green'),
+        Hexagon_Cust(size, amount, step, 'yellow')
+    ]
 
-# sequence.get_figure()
-# sequence.tr_translate(5, 5)
-sequence.tr_symmetry(-5)
-# sequence.tr_rotate(5)
+    for figure in figures:
+        figure.get_figure()
 
-# ax.add_patch(Polygon(np.array([[average(1, 2), 0],
-#                                [0, 2], [3, 2], [average(1, 2), 0]])))
 
+# figures = Polygon_Cust('yellow', [0, 0], [0, 1], [1, 1], [2, 2], [1, 0], [0, 0])
+figures = Triangle_Cust(5, 3, 2, 'pink')
+# figures = Rectangle_Cust(5, 10, 3, 2, 'black')
+# figures = Hexagon_Cust(2, 10, 1, 'purple')
+
+# figures.get_figure()
+# figures.tr_translate(7, -14)
+# figures.tr_symmetry(15)
+# figures.tr_rotate(30)
+
+
+# iter(5, 5, 5)
 plt.show()
